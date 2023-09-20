@@ -1,34 +1,39 @@
-#include "simple_shell.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 /**
- * main - our shell that read and allocate a token and execute a certain comand
+ * main - our shell that reads and allocates a token and executes a certain command
  *
- * @ac: count how many aurgument we have
+ * @ac: count of how many arguments we have
  * @argv: it is the arguments entered
  *
  * Return: 0 Success all the time
-*/
+ */
 int main(int ac, char **argv)
 {
-	char *ln = NULL;
-	/*char **cmd = NULL;*/
-	int stat = 0;
-	(void) acc;
-	(void) argv;
+char *ln = NULL;
+size_t len = 0;
+ssize_t nread;
+int stat = 0;
+(void) ac;
+(void) argv;
 
-	while (1)
-	{
-		ln = readln();
-		if (ln == NULL) /*function needed for CTRL+D to reach EOF*/
-		{
-			if (isatty(STDIN_FILENO))
-				write(STDOUT_FILENO, "/n", 1);
-			return (stat);
-		}
+while (1)
+{
+nread = getline(&ln, &len, stdin);
+if (nread == -1)
+{
+free(ln);
+if (isatty(STDIN_FILENO))
+write(STDOUT_FILENO, "\n", 1);
+return (stat);
+}
 
-		/*cmd = tokenizer(ln);
+printf("Input Line: %s", ln);
+}
 
-		stat = _exe(command, argv);*/
-	}
-
+free(ln);
+return (0);
 }
